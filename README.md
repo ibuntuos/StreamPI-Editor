@@ -9,7 +9,7 @@
 #### 2. Zugriff auf die RaspberryPI mittels Keyfile und SSH einrichten
   * Eine Gute Anleitung dazu findet sich hier: https://jankarres.de/2013/12/raspberry-pi-ssh-schluessel-erstellen-und-passwort-aendern/
   * Wichtig: Den "Private Key" unbedingt sichern, er wird später im "StreamPI Editor" benötigt.
-  * Der "StreamPI Editor" funktioniert ausschließlich mit Keyfiles, eine Verbindung zu einer nicht mit Keyfile gesicherter RaspberryPI ist nicht möglich.
+  * Der "StreamPI Editor" funktioniert ausschließlich mit Keyfiles, eine Verbindung zu einer nicht mit Keyfile gesicherten RaspberryPI ist nicht möglich.
 
 #### 3. Installation und Einrichtung von NGINX
   * Um einen NGINX-RTMP Server einzurichten wird im Terminal der RaspberryPI folgendes eingegeben:
