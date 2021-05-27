@@ -4,11 +4,12 @@
 
 ### Einrichtung der StreamPI
 #### 1. RaspberryPI besorgen und Grundsystem installieren
-  * RaspberryPI muss zunächst eingerichtet werden, am Besten mit dem Raspberry Pi Imager
+  * RaspberryPI muss zunächst eingerichtet werden, am Besten mit dem Raspberry Pi Imager (https://www.raspberrypi.org/documentation/installation/installing-images/)
 
 #### 2. Zugriff auf die RaspberryPI mittels Keyfile und SSH einrichten
   * Eine Gute Anleitung dazu findet sich hier: https://jankarres.de/2013/12/raspberry-pi-ssh-schluessel-erstellen-und-passwort-aendern/
-  * Wichtig: Den "Private Key" unbedingt sichern, er wird später im "StreamPI Editor" benötigt - der "StreamPI Editor" funktioniert ausschließlich mit Keyfiles, ein Verbindung zu einer nicht mit Keyfile gesicherter RaspberryPI ist nicht möglich.
+  * Wichtig: Den "Private Key" unbedingt sichern, er wird später im "StreamPI Editor" benötigt.
+  Der "StreamPI Editor" funktioniert ausschließlich mit Keyfiles, ein Verbindung zu einer nicht mit Keyfile gesicherter RaspberryPI ist nicht möglich.
 
 #### 3. Installation und Einrichtung von NGINX
   * Um einen NGINX-RTMP Server einzurichten wird im Terminal der RaspberryPI folgendes eingegeben:
@@ -60,9 +61,9 @@
 
   * Anschließend den Server neustarten:
 
-    ```
+  ```
     sudo systemctl restart nginx
-    ```
+  ```
 
   * Es gibt noch das Problem, das NGINX oft bei den RaspberryPIs aufgrund eines zu geringen Timeouts nicht beim Booten startet. Dies ist einfach zu beheben. Einfach folgende Datei editieren:
 
