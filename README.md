@@ -19,13 +19,13 @@
   sudo nano /etc/nginx/rtmp.conf
   ```
 
-  * In der sich dann öffnenden Datei gebt Ihr folgendes ein:
+  * In der sich dann öffnenden Datei gebt ihr folgendes ein:
 
   ```
   rtmp {
   server {
     listen 1935;
-    #listen [::]:1935 ipv6only=on;
+    listen [::]:1935 ipv6only=on;
     chunk_size 4096;
     allow play all;
     allow publish all;
@@ -47,8 +47,8 @@
         }
     }
   ```
-  * Dies ist eine Beispieldatei die schon für das Streaming sowohl über IP4 als auch IPv6 (DS-Lite wie bei Deutscher Glasfaser oder Vodafone Kabel) eingerichtet ist.
-  * Ebenfalls sind in dieser Datei schon mal Dummy-URLs für das Verteilen nach Restream oder direkt nach DLive.tv. Streaming-Einstellungen für z.B. Facebook kann im Internet finden.
+  * Dies ist eine Beispieldatei die schon für das Streaming sowohl über IPv4 als auch IPv6 (DS-Lite wie bei Deutscher Glasfaser oder Vodafone Kabel) eingerichtet ist.
+  * Ebenfalls sind in dieser Datei schon mal Dummy-URLs für das Verteilen nach Restream oder direkt nach DLive.tv. Konkrete Streaming-Einstellungen für z.B. Facebook kann im Internet finden.
   * Nach der Eingabe das ganze mit STRG+X speichern und bestätigen.
   * Danach die die NGINX-Konfigurationsdatei öffnen mit
   "sudo nano /etc/nginx/nginx.conf"
@@ -83,10 +83,12 @@
   * Einfach das Repository hier als ZIP downloaden, entpacken und die "StreamPI Editor.pyw" Datei aufrufen.
 
 ### Verwendung
-  * Nach dem Programmstart müssen im Bereicht der Zugangsdaten die konkreten Daten der RaspberryPI eingetragen werden, inkl. dem Pfad zum Private-Key.
+  * Nach dem Programmstart müssen im oberen Bereich der Zugangsdaten die konkreten Daten der RaspberryPI eingetragen werden, inkl. dem Pfad zum Private-Key und dem SSH Port.
   * Danach auf "Speichern" bei den Zugangsdaten klicken, damit die Daten beim nächsten Programmstart wieder verfügbar sind.
-  * Abschließend auf "Verbinden" klicken - das Programm versucht sicht zur vorher konfigurierten RaspberryPI zu verbinden und lädt die dort hinterlegte RTMP-Konfiguration. Diese kann nun nach belieben geändert werden, Anleitungen dazu finden sich viele im Internet.
+  * Abschließend auf "Verbinden" klicken - das Programm versucht sich dann zur vorher konfigurierten RaspberryPI zu verbinden und lädt die dort hinterlegte RTMP-Konfiguration.
+  * Diese kann nun nach belieben geändert werden, Anleitungen dazu finden sich viele im Internet.
   * Am Ende den unteren "Speichern" Button benutzen, dann wird die Konfiguration auf die RaspberryPI zurückgeschrieben und der RTMP-Server wird durchgestartet.
+  * Im Streaming-Programm (z.B. OBS) dann einfach die URL der StreamPI eingeben (z.B: rtmp://localhost:1935/live)
 
 
 So long und Danke für den vielen Fisch!
