@@ -71,8 +71,8 @@ while True:
     if event == 'Speichern':
         filename.write_text(values.get('_BODY_'))
         sg.popup("StreamPI Konfiguration wird upgedatet ...      ", button_type=sg.POPUP_BUTTONS_NO_BUTTONS, auto_close=True,auto_close_duration=3, non_blocking=True, title="Bitte warten", keep_on_top=True )
-        scp.put(WorkPath+'/rtmp.conf', '/home/pi/Documents')
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("sudo mv /home/pi/Documents/rtmp.conf /etc/nginx")
+        scp.put(WorkPath+'/rtmp.conf', '/home/'+usrname)
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('sudo mv /home/'+usrname+'/rtmp.conf /etc/nginx/')
         time.sleep(5)
         sg.popup("StreamPI Server wird neu gestartet ...", button_type=sg.POPUP_BUTTONS_NO_BUTTONS, auto_close=True,auto_close_duration=3, non_blocking=True, title="Bitte warten", keep_on_top=True )
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("sudo systemctl restart nginx")

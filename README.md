@@ -8,8 +8,11 @@
 
 #### 2. Zugriff auf die RaspberryPI mittels Keyfile und SSH einrichten
   * Eine Gute Anleitung dazu findet sich hier: https://jankarres.de/2013/12/raspberry-pi-ssh-schluessel-erstellen-und-passwort-aendern/
+  * Hierbei den "Public Key" nicht als Datei speichern sondern sich aus dem Textfeld von Puttygen in die Zwischenablage kopieren und dann auf der RaspberryPI unter "authorized_keys" wie in der Anleitung beschrieben kopieren.
+  * Den "Private Key" als OpenSSH-Key exportieren.
   * Wichtig: Den "Private Key" unbedingt sichern, er wird später im "StreamPI Editor" benötigt.
   * Der "StreamPI Editor" funktioniert ausschließlich mit Keyfiles, eine Verbindung zu einer nicht mit Keyfile gesicherten RaspberryPI ist nicht möglich.
+  * Wichtig: sollte man einen eigenen User zur besseren Absicherung der StreamPI einrichten wollen, so muss man diesem das Recht einräumen, ohne Passwort "sudo" Kommandos abzusetzen. Wie das geht ist hier beschrieben: https://www.cyberciti.biz/faq/linux-unix-running-sudo-command-without-a-password/
 
 #### 3. Installation und Einrichtung von NGINX
   * Um einen NGINX-RTMP Server einzurichten wird im Terminal der RaspberryPI folgendes eingegeben:
@@ -50,8 +53,11 @@
   * Dies ist eine Beispieldatei die schon für das Streaming sowohl über IPv4 als auch IPv6 (DS-Lite wie bei Deutscher Glasfaser oder Vodafone Kabel) eingerichtet ist.
   * Ebenfalls sind in dieser Datei schon mal Dummy-URLs für das Verteilen nach Restream oder direkt nach DLive.tv. Konkrete Streaming-Einstellungen für z.B. Facebook kann im Internet finden.
   * Nach der Eingabe das ganze mit STRG+X speichern und bestätigen.
-  * Danach die die NGINX-Konfigurationsdatei öffnen mit
-  "sudo nano /etc/nginx/nginx.conf"
+  * Danach die die NGINX-Konfigurationsdatei öffnen mit:
+
+  ```
+  sudo nano /etc/nginx/nginx.conf
+  ```  
 
   Und dort dann als erste Zeile eingeben:
 
