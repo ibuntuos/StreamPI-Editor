@@ -1,18 +1,108 @@
 # StreamPI - Kostenlose Restreamlösung für Raspberry Pi
- Hier ist die Anleitung zur Einrichtung einer "StreamPI" auf einer RaspberryPI (3 oder höher).
- Das Programm "StreamPI Editor" dient dann zur Konfiguration
+ Der "StreamPi Editor" ist die Steuersoftware für die "StreamPI", einer speziell konfigurierten RaspberryPI (Einplatinencomputer im EC-Karten-Format), die als Streaming- und Restreamserver fungiert. Mithilfe des StreamPI Editors kann die Konfuguration der StreamPI dann von jedem Rechner aus der Ferne kontrolliert werden, ohne Konselenbefehle etc.
+ Das ist gerade für Leute interessant, die über Youtube, Twitch, Trovo oder DLive streamen und denen die kostenlosen Möglichkeiten von Restream.io zu wenig sind.
+ Im Folgenden findet sich eine einfache Punkt für Punkt Anleitung wie man eine Standard-StreamPI aufsetzt und mit diesem Tool kontrolliert. Dabei wird ein vorkonfiguriertes Image benutzt für die RaspberryPI, welches einfach nur heruntergeladen und auf SD-Karte kopiert werden muss.
+
+ Wer keine vorkonfigurierten Images mag findet weiter unten die Anleitung "from Scratch", wie man sich eine StreamPI komplett selbst konfiguriert.
+
+
+## Anleitung mit Hilfe des StreamPI-images
+### Einrichtung der StreamPI
+#### 1. RaspberryPI besorgen
+Es wird eine RaspberryPI 3 oder höher benötigt, damit der Streaming-Server auch genug Luft zum Arbeiten hat. Sucht euch einfach am Besten Set wo die PI und Gehäust sowie Kühler und Lüfter scohn mit dabei sind. Das Ganze ist in fünf Minuten dann zusammengebaut.
+Ihr braucht zusätzlich noch eine schnelle SD-Karte, 32 GB sollten es da schon sein.
+
+![RaspberrySet](img/raspberry.jpg)
+
+#### 2. StreamPI Image downloaden und auf SD Karte klonen
+Das offizielle Image einer komplett für das Streaming vorkonfigurierten StreamPI kann man hier herunterladen:
+
+Link
+
+Anschließend mit dem Programm Win32 Imager das Image auf eine SD-Karte kopieren.
+https://win32-disk-imager.de.uptodown.com/windows
+
+![DiskImager](img/DiskImager.PNG)
+
+
+Die SD Karte im Anschluss daran in die RaspberryPI stecken und die PI anschalten.
+
+Die "StreamPI" kann auch über WLan betrieben werden, wir empfehlen aber die Verwendung über Lan-Kabel, auch weil dann die Einrichtung an der StreamPI entfällt, ansonsten muss man jetzt die StreamPI an einen Monitor, Tastatur und Maus anschließen und dann die WLAN-Verbindung einrichten.
+
+### Einrichtung des StreamPI Editors
+#### Python installieren
+Zur Verwendung des StreamPI Editors auf dem Streaming-Rechner (wir empfehlen Windows, es funktioniert aber natürlich auch unter Mac oder Linux, ist von uns nur nicht getestet), muss auf diesem Python in der Version 3.8 oder höher installiert sein.
+
+Python kann hier heruntergeladen und installiert werden: https://www.python.org/downloads/
+
+Wichtig: Bei der Installation darauf achten, dass die PATH oder "Umgebungsvariablen" upgedatet werden, sonst funktioniert später das Programm nicht.
+
+### Download und Start des StreamPI Editors
+Sobald die StreamPI im Netzwerk läuft und Python auf dem Rechner, von welchem aus die StreamPI kontrolliert werden soll, installiert ist. einfach dieses Repository hier downloaden, entzippen und die "StreamPI Editor.pyw" starten.
+
+Der Editor lädt sich mit der Standard-Konfiguration:
+
+![StreamPIEditor](img/StreamPiEditor.PNG)
+
+
+In der rechten oberen Ecke sieht man wie bei einem normalen SSH oder FTP-Client die Eingabefelder für die Zugangsdaten. Bei Verwendung des vorkonfigurierten StreamPI-Images muss man hier lediglich das Passwort eintragen.
+
+Das Standard-Passwort ist:
+```
+  streampi1#X
+```
+
+Danach auf den "Speichern" Button bei den Zugangsdaten klicken und anschließend auf "Verbinden".
+
+
+### Verwendung des StreamPI Editors
+Der StreamPI Editor lädt sich die Standard-RTMP-Konfiguration von der StreamPI im Netz und öffnet sie zum Bearbeiten.
+
+Der Vorteil der StreamPI liegt darin, dass sie den Stream an viele Plattformen weiterleiten kann, eben wie "Restream.io", nur ohne Beschränkungen.
+
+#### Hinzufügen von Plattform an die weiter gestreamt werden soll
+* Um das Streaming-Signal der StreamPI auf mehrere Plattformen wie Twitch, Youtube etc. weiterzuleiten, nutzt man die "push"-Funktionalität der StreamPI. Hierfür gibt man dem Stream einfach per "push" den Befehl zum Weiterleiten - sagen wir z.B. zu Twitch.
+
+* Hierfür ändert man die Standard-Konfiguration, die im StreamPI Editor geladen wird, wie folgt:
+
+* Man fügt im Bereich "Direct Restream" folgende Zeile hinzu:
+```
+push rtmp://live-sea.twitch.tv/app ";
+```
+* Hierbei wird natürlich "{stream_key}" durch den eigenen Streamingkey des Streaminganbieters ersetzt.
+
+* Das Ganze sieht dann in etwa so aus:
+![Twitch](img/Mit_Twitch.PNG)
+
+* Danach auf den unteren "Speichern" Button klicken, dies schreibt die Konfiguration zurück auf die StreamPI und macht sie bereit, Signale anzunehmen.
+
+### Einrichtung in Streamingsoftware
+Um jetzt auch über die StreamPI streamen zu können, muss z.B. in OBS bei den Streaming-Einstellungen folgender Server angesprochen werden:
+
+```
+rtmp://streampi:1935/live
+```
+
+### Sicherheitshinweis
+Es wird empfholen das Passwort und den Benutzername der StreamPI zu ändern, da beim vorkonfigurierten Image alles auf Standard-Einstellungen gelassen wurde.
+
+Ich empfehle die Verwendung von Keyfiles für die Verbindung zur StreamPI aber ein sicheres Passwort tut es natürlich auch.
+
+***
+
+## Anleitung "from Scratch"
+Hier nun die Anleitung wie man sich selbst eine "StreamPI" einrichtet. Richtet sich an Bastler und Fortgeschrittene
 
 ### Einrichtung der StreamPI
-#### 1. RaspberryPI besorgen und Grundsystem installieren
-  * RaspberryPI muss zunächst eingerichtet werden, am Besten mit dem Raspberry Pi Imager (https://www.raspberrypi.org/documentation/installation/installing-images/)
+#### 1. RaspberryPI OS besorgen und Grundsystem installieren
+  * RaspberryPI OS muss zunächst eingerichtet werden, am Besten mit dem Raspberry Pi Imager (https://www.raspberrypi.org/documentation/installation/installing-images/)
 
 #### 2. Zugriff auf die RaspberryPI mittels Keyfile und SSH einrichten
   * Eine Gute Anleitung dazu findet sich hier: https://jankarres.de/2013/12/raspberry-pi-ssh-schluessel-erstellen-und-passwort-aendern/
   * Hierbei den "Public Key" nicht als Datei speichern sondern sich aus dem Textfeld von Puttygen in die Zwischenablage kopieren und dann auf der RaspberryPI unter "authorized_keys" wie in der Anleitung beschrieben kopieren.
   * Den "Private Key" als OpenSSH-Key exportieren.
   * Wichtig: Den "Private Key" unbedingt sichern, er wird später im "StreamPI Editor" benötigt.
-  * Der "StreamPI Editor" funktioniert ausschließlich mit Keyfiles, eine Verbindung zu einer nicht mit Keyfile gesicherten RaspberryPI ist nicht möglich.
-  * Wichtig: sollte man einen eigenen User zur besseren Absicherung der StreamPI einrichten wollen, so muss man diesem das Recht einräumen, ohne Passwort "sudo" Kommandos abzusetzen. Wie das geht ist hier beschrieben: https://www.cyberciti.biz/faq/linux-unix-running-sudo-command-without-a-password/
+  * Sollte man einen eigenen User zur besseren Absicherung der StreamPI einrichten wollen, so muss man diesem das Recht einräumen, ohne Passwort "sudo" Kommandos abzusetzen. Wie das geht ist hier beschrieben: https://www.cyberciti.biz/faq/linux-unix-running-sudo-command-without-a-password/
 
 #### 3. Installation und Einrichtung von NGINX
   * Um einen NGINX-RTMP Server einzurichten wird im Terminal der RaspberryPI folgendes eingegeben:
@@ -59,7 +149,7 @@
   sudo nano /etc/nginx/nginx.conf
   ```  
 
-  Und dort dann als erste Zeile eingeben:
+  Und dort dann als letzte Zeile eingeben:
 
   ```
     include /etc/nginx/rtmp.conf;
@@ -71,30 +161,31 @@
     sudo systemctl restart nginx
   ```
 
-  * Es gibt noch das Problem, das NGINX oft bei den RaspberryPIs aufgrund eines zu geringen Timeouts nicht beim Booten startet. Dies ist einfach zu beheben. Einfach folgende Datei editieren:
+  * Es gibt noch das Problem, dass NGINX bei den RaspberryPIs aufgrund eines zu geringen Timeouts nicht beim Booten startet. Dies ist leicht zu beheben. Einfach folgende Datei editieren:
 
   ```
   sudo nano /lib/systemd/system/nginx.service
   ```
-  Dort im Bereich "[Service]" folgende Zeile ergänzen:
+  Dort im Bereich "[Service]" folgende Zeile auskommentieren und durch die nachfolgende ersetzen:
+
   ```
-  TimeoutStopSec=5
+  #ExecStartPre=/usr/sbin/nginx -t -q -g 'daemon on; master_process on;'
+  ExecStartPre=/bin/sleep 3
+  ```
+  als letzten Eintrag im "[Service]" Bereich der Datei dann noch folgendes eintragen:
+
+  ```
+  Restart=always
   ```
 
-#### 4. Download und Installation von Python (min. 3.8)
-  * Python kann man hier downloaden: https://www.python.org/downloads/
-  * Der "StreamPI Editor" ist auf die Verwendung mit Windows optimiert, sollte aber auch unter Mac und Linux funktionieren
+  Anschließend die Datei speichern und den Service neu laden:
+  ```
+  sudo systemctl enable nginx
+  ```
 
-#### 5. Download des StreamPI Editors
-  * Einfach das Repository hier als ZIP downloaden, entpacken und die "StreamPI Editor.pyw" Datei aufrufen.
-
-### Verwendung
-  * Nach dem Programmstart müssen im oberen Bereich der Zugangsdaten die konkreten Daten der RaspberryPI eingetragen werden, inkl. dem Pfad zum Private-Key und dem SSH Port.
-  * Danach auf "Speichern" bei den Zugangsdaten klicken, damit die Daten beim nächsten Programmstart wieder verfügbar sind.
-  * Abschließend auf "Verbinden" klicken - das Programm versucht sich dann zur vorher konfigurierten RaspberryPI zu verbinden und lädt die dort hinterlegte RTMP-Konfiguration.
-  * Diese kann nun nach belieben geändert werden, Anleitungen dazu finden sich viele im Internet.
-  * Am Ende den unteren "Speichern" Button benutzen, dann wird die Konfiguration auf die RaspberryPI zurückgeschrieben und der RTMP-Server wird durchgestartet.
-  * Im Streaming-Programm (z.B. OBS) dann einfach die URL der StreamPI eingeben (z.B: rtmp://localhost:1935/live)
+Zur Verwendung des StreamPI Editors siehe Anleitung weiter oben.
+  
+***
 
 
 So long und Danke für den vielen Fisch!

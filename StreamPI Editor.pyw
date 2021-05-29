@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-# (c) 2021 OJ
+# (c) 2021 Rick Sanchez
 
 import time, sys, os, pathlib, subprocess
 from conf.config import *
+from conf.auth import *
+
 WorkPath=os.path.dirname(os.path.realpath(__file__))+'/conf'
 try:
     import PySimpleGUI as sg
     import paramiko
     import scp
+    import cryptography
 
-except:
+except Exception as e:
+    print(e)
     os.system("python "+os.path.join(WorkPath, "dependencies.py"))
     import PySimpleGUI as sg
     import paramiko
@@ -20,27 +24,17 @@ winicon=WorkPath+'/favicon.ico'
 WIN_W = 150
 WIN_H = 30
 
-#Delete old config
+#Delete old rtmp-config
 filename = pathlib.Path(WorkPath+'/rtmp.conf')
 if filename.is_file():
  os.remove(filename)
 
-#Function for saving Config
-def writestuff():
-		#write config to .conf file for bashscript
-		#filepath = os.path.join(WorkPath,'/config.py')
-		f = open(WorkPath+'/config.py',"w")
-		configcontent = "#!/usr/bin/env python3\nhostname='%s'\nusrname='%s'\nk='%s'\np='%s'\n" %(str(hostname),str(usrname),str(k),str(p))
-		print(configcontent)
-		#print(filepath)
-		f.write(configcontent)
-
-
 frame_layout = [
-    [sg.Text('Host   '), sg.InputText(key='hname'), sg.T('                     ')],
-    [sg.Text('User   '), sg.InputText(key='uname'), sg.T('                     ')],
-    [sg.Text('Port    '), sg.InputText(key='portn'), sg.T('                     ')],
-    [sg.Text('Key    '), sg.InputText(key='kfile'), sg.Button("Suche")],
+    [sg.Text('Host         '), sg.InputText(key='hname'), sg.T('                     ')],
+    [sg.Text('Port          '), sg.InputText(key='portn'), sg.T('                     ')],
+    [sg.Text('User         '), sg.InputText(key='uname'), sg.T('                     ')],
+    [sg.Text('Passwort  '), sg.InputText('', key='pwdu', password_char="*"), sg.T('                     ')],
+    [sg.Text('Key          '), sg.InputText(key='kfile'), sg.Button("Suche")],
     [sg.T('                     ')],
     [sg.Button('Speichern', key='SettingSave'), sg.Button('Verbinden')]
 ]
@@ -64,6 +58,7 @@ window['hname'].update(hostname)
 window['uname'].update(usrname)
 window['portn'].update(p)
 window['kfile'].update(k)
+window['pwdu'].update(passwd)
 
 
 while True:
@@ -91,32 +86,37 @@ while True:
             usrname= values['uname']
             p= values['portn']
             k= values['kfile']
-            kf = paramiko.RSAKey.from_private_key_file(k)
-            print(kf)
+            passw=values['pwdu']
             ssh = paramiko.SSHClient()
+            ssh.load_system_host_keys()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname, port=p, username=usrname, pkey = kf)
+            if k == '':
+                ssh.connect(hostname, port=p, username=usrname, password=passw)
+            else:
+                kf = paramiko.RSAKey.from_private_key_file(k)
+                ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                ssh.connect(hostname, port=p, username=usrname, pkey = kf)
+
             time.sleep(4)
             window['-LINE-OUTPUT-'].update("Verbindung mit StreamPI hergestellt.")
-            print("Lade Konfiguration...")
             scp = scp.SCPClient(ssh.get_transport())
-            print('/etc/nginx/rtmp.conf', WorkPath)
             scp.get('/etc/nginx/rtmp.conf', WorkPath)
             time.sleep(2)
             filename = pathlib.Path(WorkPath+'/rtmp.conf')
             window['_BODY_'].update(value=filename.read_text())
             window['Speichern'].update(disabled=False)
-        except:
-         print("Keine Verbindung zur StreamPI möglich. Ist sie an?")
-         window['-LINE-OUTPUT-'].update("Keine Verbindung zur StreamPI möglich!")
-         window['Speichern'].update(disabled=True)
+        except Exception as e:
+            print(e)
+            window['-LINE-OUTPUT-'].update("Keine Verbindung zur StreamPI möglich!")
+            window['Speichern'].update(disabled=True)
 
     if event == 'SettingSave':
         hostname= values['hname']
-        usrname= values['uname']
         p= values['portn']
+        usrname= values['uname']
+        passw=values['pwdu']
         k= values['kfile']
-        writestuff()
+        writestuff(keyID, WorkPath, hostname, p, usrname, passw, k)
         window['-LINE-OUTPUT-'].update("Zugangsdaten gespeichert!")
     if event == sg.WINDOW_CLOSED or event == 'Beenden':
         break
