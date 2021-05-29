@@ -17,10 +17,13 @@ Ihr braucht zusätzlich noch eine schnelle SD-Karte, 32 GB sollten es da schon s
 #### 2. StreamPI Image downloaden und auf SD Karte klonen
 Das offizielle Image einer komplett für das Streaming vorkonfigurierten StreamPI kann man hier herunterladen:
 
-Link
+##### [Download StreamPI Image](https://mega.nz/file/EQI3wAwZ#2UC5Rse4YukLyoF1ltkkWXVmoh2fQBUjOrBPsJkkHFA)
+
+![imgdl](img/imagedl.png)
 
 Anschließend mit dem Programm Win32 Imager das Image auf eine SD-Karte kopieren.
-https://win32-disk-imager.de.uptodown.com/windows
+
+##### [Download Win32 Imager](https://win32-disk-imager.de.uptodown.com/windows)
 
 ![DiskImager](img/DiskImager.PNG)
 
