@@ -84,7 +84,7 @@ rtmp://streampi:1935/live
 ```
 
 ### Sicherheitshinweis
-Es wird empfholen das Passwort und den Benutzername der StreamPI zu ändern, da beim vorkonfigurierten Image alles auf Standard-Einstellungen gelassen wurde.
+Es wird empfohlen das Passwort und den Benutzername der StreamPI zu ändern, da beim vorkonfigurierten Image alles auf Standard-Einstellungen gelassen wurde.
 
 Ich empfehle die Verwendung von Keyfiles für die Verbindung zur StreamPI aber ein sicheres Passwort tut es natürlich auch.
 
@@ -184,7 +184,7 @@ Hier nun die Anleitung wie man sich selbst eine "StreamPI" einrichtet. Richtet s
   ```
 
 Zur Verwendung des StreamPI Editors siehe Anleitung weiter oben.
-  
+
 ***
 
 
