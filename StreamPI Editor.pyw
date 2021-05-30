@@ -3,7 +3,7 @@
 
 import time, sys, os, pathlib, subprocess
 from conf.config import *
-from conf.auth import *
+
 
 WorkPath=os.path.dirname(os.path.realpath(__file__))+'/conf'
 try:
@@ -11,6 +11,7 @@ try:
     import paramiko
     import scp
     import cryptography
+    from conf.auth import *
 
 except Exception as e:
     print(e)
@@ -18,6 +19,7 @@ except Exception as e:
     import PySimpleGUI as sg
     import paramiko
     import scp
+    from conf.auth import *
 
 sg.theme('LightBrown')   # Add a touch of color
 winicon=WorkPath+'/favicon.ico'
