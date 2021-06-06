@@ -15,7 +15,7 @@ try:
 
 except Exception as e:
     print(e)
-    os.system("python "+os.path.join(WorkPath, "dependencies.py"))
+    os.system(os.path.join(WorkPath, "dependencies.bat"))
     import PySimpleGUI as sg
     import paramiko
     import scp
@@ -54,7 +54,7 @@ layout = [  [sg.Column(colHeader),sg.T('                                        
             [sg.Text(size=(40,1), key='-LINE-OUTPUT-')]]
 
 # Create the Window
-window = sg.Window('StreamPI Konfigurations Editor 1.0 ©2021 Rick Sanchez', layout=layout, icon=winicon, margins=(0, 0), resizable=True, return_keyboard_events=True, finalize=True)
+window = sg.Window('StreamPI Konfigurations Editor 1.2 ©2021 Rick Sanchez', layout=layout, icon=winicon, margins=(0, 0), resizable=True, return_keyboard_events=True, finalize=True)
 window['_BODY_'].expand(expand_x=True, expand_y=True)
 window['hname'].update(hostname)
 window['uname'].update(usrname)
@@ -67,7 +67,7 @@ while True:
     event, values = window.read()
     if event == 'Speichern':
         filename.write_text(values.get('_BODY_'))
-        sg.popup("StreamPI Konfiguration wird upgedatet ...      ", button_type=sg.POPUP_BUTTONS_NO_BUTTONS, auto_close=True,auto_close_duration=3, non_blocking=True, title="Bitte warten", keep_on_top=True )
+        sg.popup("StreamPI Konfiguration wird aktualisiert ...      ", button_type=sg.POPUP_BUTTONS_NO_BUTTONS, auto_close=True,auto_close_duration=3, non_blocking=True, title="Bitte warten", keep_on_top=True )
         scp.put(WorkPath+'/rtmp.conf', '/home/'+usrname)
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('sudo mv /home/'+usrname+'/rtmp.conf /etc/nginx/')
         time.sleep(5)
@@ -75,7 +75,7 @@ while True:
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("sudo systemctl restart nginx")
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("ls -a")
         time.sleep(5)
-        window['-LINE-OUTPUT-'].update("StreamPI Konfiguration upgedatet!")
+        window['-LINE-OUTPUT-'].update("StreamPI Konfiguration aktualisiert!")
 
     if event == 'Suche':
         filename= sg.popup_get_file('Open', no_window=True)
