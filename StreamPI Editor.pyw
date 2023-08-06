@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # (c) 2021 Rick Sanchez
-
+# Update: 06.08.2023
+# Anpassung: Umstellung auf Docker
 import time, sys, os, pathlib, subprocess
 from conf.config import *
 
@@ -54,7 +55,7 @@ layout = [  [sg.Column(colHeader),sg.T('                                        
             [sg.Text(size=(40,1), key='-LINE-OUTPUT-')]]
 
 # Create the Window
-window = sg.Window('StreamPI Konfigurations Editor 1.2 ©2021 Rick Sanchez', layout=layout, icon=winicon, margins=(0, 0), resizable=True, return_keyboard_events=True, finalize=True)
+window = sg.Window('StreamPI Konfigurations Editor 1.1 ©2021-2023 Rick Sanchez', layout=layout, icon=winicon, margins=(0, 0), resizable=True, return_keyboard_events=True, finalize=True)
 window['_BODY_'].expand(expand_x=True, expand_y=True)
 window['hname'].update(hostname)
 window['uname'].update(usrname)
@@ -72,7 +73,8 @@ while True:
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('sudo mv /home/'+usrname+'/rtmp.conf /etc/nginx/')
         time.sleep(5)
         sg.popup("StreamPI Server wird neu gestartet ...", button_type=sg.POPUP_BUTTONS_NO_BUTTONS, auto_close=True,auto_close_duration=3, non_blocking=True, title="Bitte warten", keep_on_top=True )
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("sudo systemctl restart nginx")
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("sudo sh /etc/nginx/nginx_restart.sh")
+        #ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("sudo systemctl restart nginx")
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("ls -a")
         time.sleep(5)
         window['-LINE-OUTPUT-'].update("StreamPI Konfiguration aktualisiert!")
